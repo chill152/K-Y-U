@@ -3,448 +3,485 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Kỷ Yếu 2026 · Cuốn Film Thanh Xuân</title>
+  <title>Kỷ Yếu 2026 · Cuốn Phim Chầm Chậm</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #1a1c1e;
+      background: #0a0c0f;
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
     }
-    /* film grain + noise animation */
-    .film-grain-overlay {
+    /* film grain + subtle noise layers */
+    .film-grain {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjciIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMTUiLz48L3N2Zz4=');
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjgiIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMTgiLz48L3N2Zz4=');
       background-repeat: repeat;
-      opacity: 0.25;
+      opacity: 0.35;
       pointer-events: none;
-      z-index: 30;
+      z-index: 40;
       mix-blend-mode: overlay;
-      animation: grainMove 0.4s infinite;
+      animation: grainShift 0.5s infinite alternate;
     }
-    @keyframes grainMove {
+    @keyframes grainShift {
       0% { transform: translate(0,0); }
-      100% { transform: translate(2%, 1%); }
+      100% { transform: translate(1%, 0.5%); }
     }
-    /* perforations / film reel borders */
-    .film-strip-top, .film-strip-bottom {
+    /* film perforations top & bottom */
+    .film-perf {
       position: fixed;
       left: 0;
       width: 100%;
-      height: 28px;
-      background: repeating-linear-gradient(90deg, #2c2e31 0px, #2c2e31 18px, #1f2124 18px, #1f2124 36px);
-      z-index: 25;
+      height: 32px;
+      background: repeating-linear-gradient(90deg, #1e2125 0px, #1e2125 20px, #0f1114 20px, #0f1114 40px);
+      z-index: 45;
       pointer-events: none;
-      opacity: 0.85;
-      box-shadow: 0 0 0 2px rgba(0,0,0,0.3);
+      opacity: 0.9;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
     }
-    .film-strip-top { top: 0; }
-    .film-strip-bottom { bottom: 0; }
-    .film-strip-top::after, .film-strip-bottom::after {
+    .film-perf-top { top: 0; }
+    .film-perf-bottom { bottom: 0; }
+    .film-perf::after {
       content: '';
       position: absolute;
       width: 100%;
-      height: 5px;
-      background: radial-gradient(circle, #ffd966 2px, transparent 2px);
-      background-size: 12px 5px;
-      opacity: 0.5;
+      height: 4px;
+      background: radial-gradient(circle, #eab308 2px, transparent 2px);
+      background-size: 16px 4px;
+      opacity: 0.4;
+      bottom: 2px;
     }
-    /* vintage light leak */
+    /* light leak cinematic */
     .light-leak {
       position: fixed;
       inset: 0;
-      background: radial-gradient(circle at 30% 40%, rgba(255,200,100,0.08) 0%, transparent 70%);
+      background: radial-gradient(ellipse at 20% 50%, rgba(255,180,60,0.08), transparent 60%);
       pointer-events: none;
-      z-index: 20;
+      z-index: 35;
       mix-blend-mode: screen;
     }
-    .reel-icon {
-      filter: drop-shadow(0 0 4px rgba(0,0,0,0.5));
-    }
+    /* main container film card */
     .film-card {
-      background: #0f0f10e0;
-      backdrop-filter: blur(3px);
-      border: 1px solid rgba(255,215,140,0.25);
-      border-radius: 24px;
+      background: rgba(10, 12, 18, 0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(245, 190, 80, 0.3);
+      border-radius: 2rem;
+      transition: all 0.3s;
       box-shadow: 0 25px 40px -12px black;
-      transition: all 0.2s;
     }
-    .frame-border {
-      border: 1px solid rgba(210,180,140,0.5);
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+    /* class cho hiệu ứng xuất hiện từ từ */
+    .fade-reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.9s cubic-bezier(0.2, 0.9, 0.3, 1.1), transform 0.8s ease-out;
+    }
+    .fade-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* custom scroll */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #1a1c1e; }
+    ::-webkit-scrollbar-thumb { background: #b87c4f; border-radius: 8px; }
+    
+    /* camera flash overlay mượt */
+    .flash-overlay {
+      transition: opacity 0.1s linear;
+    }
+    .frame-border-glow {
+      box-shadow: 0 0 0 2px rgba(245, 190, 80, 0.3), inset 0 0 20px rgba(0,0,0,0.3);
     }
     .typing-cursor {
       display: inline-block;
       width: 2px;
       background: #f5b042;
-      margin-left: 4px;
+      margin-left: 3px;
       animation: blink 1s step-end infinite;
     }
     @keyframes blink {
       0%,100% { opacity: 1; }
       50% { opacity: 0; }
     }
-    .film-reel-spin {
-      transform-origin: center;
-    }
-    .custom-scroll::-webkit-scrollbar {
-      width: 3px;
-    }
-    .shutter-flash {
-      transition: opacity 0.08s linear;
-    }
   </style>
 </head>
-<body class="relative bg-black text-white overflow-x-hidden">
+<body class="text-white relative">
 
-  <!-- Film aesthetic layers -->
-  <div class="film-grain-overlay"></div>
+  <!-- layers điện ảnh -->
+  <div class="film-grain"></div>
   <div class="light-leak"></div>
-  <div class="film-strip-top"></div>
-  <div class="film-strip-bottom"></div>
+  <div class="film-perf film-perf-top"></div>
+  <div class="film-perf film-perf-bottom"></div>
 
-  <!-- Main container -->
-  <div class="relative z-10 max-w-6xl mx-auto px-4 md:px-8 py-14 min-h-screen flex flex-col justify-center">
+  <div class="relative z-20 max-w-6xl mx-auto px-5 md:px-7 py-12 min-h-screen flex flex-col justify-center">
     
-    <!-- Header cinematic -->
-    <div class="flex justify-between items-center mb-8 border-b border-amber-700/40 pb-4 flex-wrap gap-3">
+    <!-- header phim -->
+    <div class="flex flex-wrap justify-between items-center border-b border-amber-800/40 pb-5 mb-10">
       <div class="flex items-center gap-4">
-        <i class="fa-solid fa-film text-amber-400 text-2xl reel-icon"></i>
+        <i class="fa-solid fa-clapperboard text-amber-500 text-2xl"></i>
         <div>
-          <p class="text-[11px] tracking-[0.3em] uppercase text-amber-300/80">Kỷ yếu 2026 · Lớp 12A3</p>
-          <p class="text-xs font-mono text-stone-400">35mm · thanh xuân rực rỡ</p>
+          <p class="text-[11px] tracking-[0.25em] uppercase text-amber-400/80">Kỷ Yếu 2026 • 12A3</p>
+          <p class="text-xs font-mono text-stone-400">35mm · thanh xuân chậm rãi</p>
         </div>
       </div>
-      <div class="bg-black/40 backdrop-blur-sm px-4 py-1 rounded-full text-amber-300 text-sm font-mono border border-amber-700/30">
-        <i class="fa-regular fa-clock mr-1"></i> <span id="filmCounter">01</span> / <span id="totalFrames">05</span>
+      <div class="bg-black/50 backdrop-blur border border-amber-700/40 px-4 py-1.5 rounded-full text-amber-300 text-sm font-mono">
+        <i class="fa-regular fa-clock"></i> <span id="filmCounter">01</span> / <span id="totalFrames">05</span>
       </div>
     </div>
 
-    <!-- CORE FILM LAYOUT: 2 cột nhưng mang phong cách điện ảnh + tua phim -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+    <!-- layout chính 2 cột cinematic -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
       
-      <!-- COLUMN TRÁI: KHUNG PHIM CHÍNH + "CẢNH QUAY" động -->
-      <div class="space-y-6 relative">
-        <!-- Main Frame: photo như một frame phim 35mm với hiệu ứng sáng bóng -->
-        <div class="relative group">
-          <div class="absolute -inset-1.5 bg-gradient-to-r from-amber-500/20 via-amber-300/10 to-amber-600/20 rounded-3xl blur-md"></div>
-          <div id="main-photo-frame" 
-               class="relative aspect-[4/5] bg-cover bg-center rounded-2xl overflow-hidden border-2 border-amber-700/60 shadow-2xl cursor-pointer transition-all duration-300"
-               style="background-image: url('https://picsum.photos/id/1011/900/1100'); background-position: center 30%;">
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none"></div>
-            <!-- Film count clapper -->
-            <div class="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm px-3 py-1.5 rounded-md text-[11px] font-mono text-amber-300 border-l-2 border-amber-500">
-              <i class="fa-solid fa-clapperboard mr-1"></i> SCENE · take 1
-            </div>
-            <div class="absolute top-4 right-4 bg-amber-950/60 backdrop-blur p-1.5 rounded-full text-xs font-mono">
-              <i class="fa-regular fa-camera"></i>
-            </div>
-          </div>
-          <div class="tape-marker absolute -top-3 left-8 w-20 h-6 bg-amber-800/60 rotate-[-8deg] blur-[0.6px] rounded-sm"></div>
-        </div>
-
-        <!-- "VIDEO MEMORY" dưới dạng máy chiếu phim ngắn -->
-        <div class="film-card p-4 rounded-2xl transition-all hover:shadow-amber-900/20 hover:shadow-xl">
-          <div class="flex items-center gap-2 text-amber-300 text-xs uppercase font-bold tracking-wider mb-2">
-            <i class="fa-solid fa-video"></i> <span>B-ROLL · KỈ NIỆM CHƯA CHIẾU</span>
-          </div>
-          <div id="memoryFilmReel" class="bg-black/80 rounded-xl aspect-video flex flex-col items-center justify-center relative overflow-hidden cursor-pointer border border-stone-700"
-               onclick="playCinematicMemory()">
-            <div class="absolute inset-0 bg-[url('https://picsum.photos/id/169/800/450')] bg-cover opacity-30 blur-sm scale-110"></div>
-            <div class="relative z-10 flex flex-col items-center">
-              <i class="fa-regular fa-circle-play text-5xl text-amber-400 drop-shadow-lg hover:scale-110 transition-transform"></i>
-              <p class="mt-3 font-mono text-xs bg-black/60 px-3 py-1 rounded-full">🎬 “Chuyến đi cuối cấp”</p>
-              <p class="text-[10px] text-stone-400 mt-1">01:28 · 2025</p>
+      <!-- Cột trái : Ảnh chính + video reel + polaroids (tất cả sẽ xuất hiện từ từ) -->
+      <div class="space-y-7">
+        <!-- Ảnh lớn frame phim -->
+        <div class="fade-reveal" id="revealPhotoContainer">
+          <div class="relative group">
+            <div class="absolute -inset-1.5 bg-gradient-to-r from-amber-600/20 to-amber-800/20 rounded-3xl blur-md"></div>
+            <div id="mainPhoto" 
+                 class="relative aspect-[4/5] bg-cover bg-center rounded-2xl overflow-hidden border border-amber-700/50 shadow-2xl cursor-pointer transition-all duration-300"
+                 style="background-image: url('https://picsum.photos/id/1011/900/1100'); background-position: center 30%;">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10"></div>
+              <div class="absolute bottom-5 left-5 bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-md text-[11px] font-mono text-amber-300 border-l-2 border-amber-500">
+                <i class="fa-regular fa-film"></i> FRAME · 01
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Polaroid film strip ngang: 2 frame phim nhỏ -->
-        <div class="flex gap-4 justify-start">
-          <div class="bg-black/40 backdrop-blur-sm p-1.5 rounded-xl border border-amber-700/40 w-32 transform rotate-[-2deg] shadow-md">
-            <img src="https://picsum.photos/id/20/200/200" class="w-full aspect-square object-cover rounded-md">
-            <p class="text-[9px] font-mono text-center mt-1 text-amber-200/70">🎞️ frame 01</p>
+        <!-- video kỷ niệm (dạng B-roll) xuất hiện từ từ -->
+        <div class="fade-reveal" id="revealVideo">
+          <div class="bg-black/40 backdrop-blur-sm rounded-2xl p-4 border border-amber-800/30">
+            <div class="flex items-center gap-2 text-amber-400 text-xs uppercase font-bold tracking-wider">
+              <i class="fa-solid fa-video"></i> <span>🎬 B·ROLL · KHOẢNH KHẮC</span>
+            </div>
+            <div id="memoryPlayer" class="relative mt-2 bg-black/70 rounded-xl aspect-video flex flex-col items-center justify-center overflow-hidden cursor-pointer"
+                 onclick="playMemoryScene()">
+              <div class="absolute inset-0 bg-cover bg-center blur-sm scale-110 opacity-40" style="background-image: url('https://picsum.photos/id/20/800/450');"></div>
+              <div class="relative z-10 text-center">
+                <i class="fa-regular fa-circle-play text-5xl text-amber-400 drop-shadow-lg hover:scale-110 transition"></i>
+                <p class="text-xs font-mono mt-2 bg-black/60 px-3 py-1 rounded-full">▶ KỈ NIỆM CHUYẾN ĐI</p>
+              </div>
+            </div>
           </div>
-          <div class="bg-black/40 backdrop-blur-sm p-1.5 rounded-xl border border-amber-700/40 w-32 transform rotate-[3deg] translate-y-3 shadow-md">
-            <img src="https://picsum.photos/id/26/200/200" class="w-full aspect-square object-cover rounded-md">
-            <p class="text-[9px] font-mono text-center mt-1 text-amber-200/70">🎞️ frame 02</p>
+        </div>
+
+        <!-- bộ 3 ảnh nhỏ kiểu polaroid film strip -->
+        <div class="flex gap-4 justify-start fade-reveal" id="revealPolaroids">
+          <div class="bg-black/40 p-1.5 rounded-xl border border-amber-700/50 w-28 rotate-[-2deg] transition hover:rotate-0">
+            <img src="https://picsum.photos/id/169/150/150" class="w-full aspect-square object-cover rounded-md">
+            <p class="text-[9px] font-mono text-center mt-1 text-amber-300">🎞️ frame 02</p>
           </div>
-          <div class="bg-black/40 backdrop-blur-sm p-1.5 rounded-xl border border-amber-700/40 w-32 transform rotate-[-1deg] hidden sm:block">
-            <img src="https://picsum.photos/id/169/200/200" class="w-full aspect-square object-cover rounded-md">
-            <p class="text-[9px] font-mono text-center mt-1 text-amber-200/70">🎞️ frame 03</p>
+          <div class="bg-black/40 p-1.5 rounded-xl border border-amber-700/50 w-28 rotate-[3deg] translate-y-2 transition hover:rotate-0">
+            <img src="https://picsum.photos/id/26/150/150" class="w-full aspect-square object-cover rounded-md">
+            <p class="text-[9px] font-mono text-center mt-1 text-amber-300">🎞️ frame 03</p>
+          </div>
+          <div class="bg-black/40 p-1.5 rounded-xl border border-amber-700/50 w-28 rotate-[-1deg] hidden sm:block">
+            <img src="https://picsum.photos/id/20/150/150" class="w-full aspect-square object-cover rounded-md">
+            <p class="text-[9px] font-mono text-center mt-1 text-amber-300">🎞️ frame 04</p>
           </div>
         </div>
       </div>
 
-      <!-- COLUMN PHẢI: THÔNG TIN NHÂN VẬT TRONG PHIM (cinematic bio) -->
-      <div class="film-card p-6 md:p-7 rounded-3xl backdrop-blur-md bg-black/50">
-        <div class="space-y-6">
-          <!-- Tên nhân vật + biệt danh kiểu credit -->
-          <div class="border-l-4 border-amber-400 pl-4">
-            <div class="flex items-baseline gap-3 flex-wrap">
-              <h1 id="film-name" class="text-5xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-400 handwritten">NGỌC DUNG</h1>
-              <span id="film-nickname" class="text-2xl text-amber-400/90 italic font-light">"Dung Con"</span>
+      <!-- Cột phải: thông tin nhân vật, chậm rãi hiện lên -->
+      <div class="film-card p-6 md:p-7 rounded-3xl fade-reveal" id="revealInfoCard">
+        <div class="space-y-7">
+          <!-- tên + biệt danh -->
+          <div class="border-l-4 border-amber-400 pl-5">
+            <h1 id="filmName" class="text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-amber-200 to-amber-400 bg-clip-text text-transparent">NGỌC DUNG</h1>
+            <div class="flex items-center gap-2 mt-2">
+              <span id="filmNick" class="text-2xl text-amber-400/90 italic">"Dung Con"</span>
+              <span class="text-[10px] bg-amber-900/40 px-2 py-0.5 rounded-full font-mono">⭐ main cast</span>
             </div>
-            <p class="text-stone-400 text-xs mt-1 font-mono uppercase tracking-wider">⭐ starring · nhân vật chính</p>
           </div>
 
-          <!-- Quote trích dẫn như một câu thoại -->
+          <!-- quote -->
           <div class="bg-amber-950/20 rounded-xl p-4 border border-amber-800/30">
-            <i class="fa-solid fa-quote-right text-amber-600/40 float-right text-2xl"></i>
-            <blockquote id="film-quote" class="text-lg md:text-xl italic font-light leading-relaxed text-amber-50/90">
+            <i class="fa-solid fa-quote-left text-amber-600/50 text-xl mr-2"></i>
+            <blockquote id="filmQuote" class="text-lg md:text-xl italic leading-relaxed text-stone-100">
               "Sống là phải cháy hết mình chứ không phải sống cho qua ngày"
             </blockquote>
-            <div class="text-right text-xs text-amber-400/60 mt-2 font-mono">🎙️ — câu nói để đời</div>
+            <div class="text-right text-amber-500/60 text-xs mt-2 font-mono">— dialogue trích từ ký ức</div>
           </div>
 
-          <!-- Sở thích + kỉ niệm như "props & scenes" -->
+          <!-- sở thích + kỉ niệm đẹp -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div class="bg-black/40 rounded-xl p-3">
-              <h3 class="text-amber-400 text-xs font-bold uppercase flex items-center gap-2"><i class="fa-regular fa-heart"></i> Sở thích đặc biệt</h3>
-              <ul id="film-hobbies" class="mt-2 space-y-1.5 text-sm text-stone-300">
+            <div class="bg-black/30 rounded-xl p-3">
+              <h3 class="text-amber-400 text-xs font-bold uppercase flex items-center gap-2"><i class="fa-regular fa-heart"></i> Sở thích</h3>
+              <ul id="hobbiesList" class="mt-2 space-y-1.5 text-sm text-stone-300">
                 <li>• Ngủ nướng đến 11h</li>
                 <li>• Ăn vặt cả ngày</li>
                 <li>• Chụp ảnh aesthetic</li>
+                <li>• Nghe nhạc lo-fi</li>
               </ul>
             </div>
-            <div class="bg-black/40 rounded-xl p-3">
-              <h3 class="text-amber-400 text-xs font-bold uppercase flex items-center gap-2"><i class="fa-regular fa-film"></i> Cảnh nhớ nhất</h3>
-              <ul id="film-memories" class="mt-2 space-y-1.5 text-sm text-stone-300">
-                <li>• Cả lớp thức trắng làm dự án</li>
+            <div class="bg-black/30 rounded-xl p-3">
+              <h3 class="text-amber-400 text-xs font-bold uppercase flex items-center gap-2"><i class="fa-regular fa-film"></i> Kỉ niệm vàng</h3>
+              <ul id="memoriesList" class="mt-2 space-y-1.5 text-sm text-stone-300">
+                <li>• Thức trắng làm dự án</li>
                 <li>• Dã ngoại biển lớp 12</li>
-                <li>• Lần đầu hát karaoke cùng crush</li>
+                <li>• Hát karaoke cùng crush</li>
               </ul>
             </div>
           </div>
 
-          <!-- Lời cảm ơn như closing credits -->
-          <div class="bg-gradient-to-r from-stone-900/70 to-black/50 rounded-xl p-4 border-t border-amber-700/50">
-            <p id="film-thanks" class="text-sm italic text-stone-200">
+          <!-- lời nhắn cuối phim -->
+          <div class="bg-gradient-to-r from-stone-900/60 to-black/60 rounded-xl p-4 border-t border-amber-700/40">
+            <p id="thankMsg" class="text-sm italic text-stone-200">
               "Cảm ơn 3 năm cấp 3 đã cho mình những người bạn tuyệt vời. Mãi mãi là 12A3!"
             </p>
-            <div class="flex justify-end mt-2 text-[10px] text-amber-500/70">— director's note</div>
+            <div class="flex justify-end mt-2 text-[10px] text-amber-500/60">— closing credits ✨</div>
           </div>
 
-          <!-- Social + nút tua phim (chuyển người) -->
-          <div class="flex justify-between items-center flex-wrap gap-4 pt-2">
+          <!-- social + nút chuyển cảnh -->
+          <div class="flex justify-between items-center flex-wrap gap-4">
             <div class="flex gap-5 text-xl text-stone-400">
               <a href="#" class="hover:text-amber-400 transition"><i class="fa-brands fa-instagram"></i></a>
               <a href="#" class="hover:text-amber-400 transition"><i class="fa-brands fa-tiktok"></i></a>
               <a href="#" class="hover:text-amber-400 transition"><i class="fa-brands fa-spotify"></i></a>
             </div>
-            <button id="nextFilmBtn" 
-                    class="group relative px-8 py-3 bg-amber-800/70 hover:bg-amber-600 text-white rounded-full text-base font-medium flex items-center gap-3 transition-all shadow-lg border border-amber-400/50">
-              <i class="fa-solid fa-forward-step group-hover:animate-pulse"></i>
+            <button id="nextSceneBtn" 
+                    class="group px-7 py-3 bg-amber-800/60 hover:bg-amber-700 text-white rounded-full text-sm font-medium flex items-center gap-3 transition-all shadow-lg border border-amber-500/40">
+              <i class="fa-solid fa-forward-step"></i>
               <span>CHUYỂN CẢNH · Next</span>
               <i class="fa-regular fa-clapperboard"></i>
             </button>
           </div>
           <div class="text-center text-[10px] font-mono text-stone-500 tracking-wider">
-            ㅇ <span class="mx-1">⏺ REC</span> ㅇ 24fps · thanh xuân
+            ㅇ <span class="mx-1">🎞️ 24 FPS</span> ㅇ chậm thôi, để nhớ lâu
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Chú thích cuối phim -->
-    <div class="mt-14 text-center text-stone-500 text-[10px] font-mono uppercase border-t border-stone-800 pt-5 flex justify-center gap-5">
-      <span><i class="fa-regular fa-copyright"></i> kỉ yếu 2026 · 12A3</span>
-      <span><i class="fa-regular fa-film"></i> cuốn phim tuổi 18</span>
+    <!-- cuối phim -->
+    <div class="mt-14 text-center text-stone-500 text-[10px] font-mono uppercase border-t border-stone-800/60 pt-5 flex justify-center gap-6">
+      <span><i class="fa-regular fa-copyright"></i> kỷ yếu 2026 · 12A3</span>
+      <span><i class="fa-regular fa-film"></i> cuốn phim tuổi 18 · thong thả</span>
     </div>
   </div>
 
-  <!-- Flash overlay -->
-  <div id="cinemaFlash" class="fixed inset-0 bg-white pointer-events-none z-50 opacity-0 transition-opacity duration-75"></div>
+  <!-- Flash overlay dùng cho hiệu ứng máy ảnh -->
+  <div id="flashEffect" class="fixed inset-0 bg-white pointer-events-none z-50 opacity-0 transition-opacity duration-100"></div>
 
   <script>
-    // ----- Dữ liệu diễn viên / nhân vật (mở rộng, cinematic) -----
-    const filmCast = [
+    // ---------- Dàn diễn viên (data mở rộng) ----------
+    const profiles = [
       {
-        name: "NGỌC DUNG",
-        nickname: "Dung Con",
+        name: "NGỌC DUNG", nickname: "Dung Con",
         photo: "https://picsum.photos/id/1011/900/1100",
         quote: "Sống là phải cháy hết mình chứ không phải sống cho qua ngày",
-        hobbies: ["• Ngủ nướng đến 11h ☕", "• Ăn vặt cả ngày 🍟", "• Chụp ảnh aesthetic 📸", "• Nhạc lo-fi khi học 🎧"],
-        memories: ["• Cả lớp thức trắng đêm làm dự án", "• Dã ngoại biển 12 — bình minh đẹp nhất", "• Hát karaoke với crush và nhận mic lắc"],
+        hobbies: ["• Ngủ nướng đến 11h ☕", "• Ăn vặt cả ngày 🍿", "• Chụp ảnh aesthetic 📸", "• Nhạc lo-fi khi học 🎧"],
+        memories: ["• Cả lớp thức trắng đêm làm dự án", "• Dã ngoại biển 12 — bình minh đẹp", "• Lần đầu hát karaoke với crush"],
         thanks: "Cảm ơn 3 năm cấp 3 cho tôi những người bạn tuyệt vời. Mãi là 12A3! 🎞️"
       },
       {
-        name: "MINH ANH",
-        nickname: "Mèo Anh",
+        name: "MINH ANH", nickname: "Mèo Anh",
         photo: "https://picsum.photos/id/64/900/1100",
         quote: "Hạnh phúc là được ở bên những người mình yêu thương",
         hobbies: ["• Đọc sách mỗi tối 📖", "• Uống trà sữa 🧋", "• Vẽ tranh 🎨", "• Đi dạo công viên 🌿"],
-        memories: ["• Chuyến đi tình nguyện vùng cao", "• Cùng làm bánh Trung thu dưới trăng", "• Đêm giáng sinh ấm áp bên lớp"],
-        thanks: "Cảm ơn các cậu đã ở bên tớ lúc khó khăn. Yêu 12A3 vô bờ! ❄️"
+        memories: ["• Chuyến tình nguyện vùng cao", "• Làm bánh Trung thu tập thể", "• Đêm giáng sinh ấm áp"],
+        thanks: "Cảm ơn các cậu đã ở bên tớ. Yêu 12A3 vô bờ! ❄️"
       },
       {
-        name: "QUANG HUY",
-        nickname: "Huy Pro",
+        name: "QUANG HUY", nickname: "Huy Pro",
         photo: "https://picsum.photos/id/201/900/1100",
         quote: "Đừng sợ thất bại, sợ nhất là không dám thử",
-        hobbies: ["• Đá bóng cuồng nhiệt ⚽", "• Lập trình web 💻", "• Nghe indie 🎸", "• Nấu ăn 🍳"],
-        memories: ["• Giải nhất bóng đá liên trường", "• Hackathon 24h code xuyên đêm", "• Sinh nhật bất ngờ từ hội bạn"],
-        thanks: "12A3 cho tớ nhiều kỉ niệm đẹp. Cảm ơn tất cả các bạn! 🏆"
+        hobbies: ["• Đá bóng ⚽", "• Lập trình web 💻", "• Nghe indie 🎸", "• Nấu ăn 🍳"],
+        memories: ["• Vô địch giải bóng đá liên trường", "• Hackathon 24h", "• Sinh nhật bất ngờ"],
+        thanks: "12A3 cho tớ nhiều kỉ niệm đẹp. Cảm ơn các bạn! 🏆"
       },
       {
-        name: "PHƯƠNG LINH",
-        nickname: "Linh Pé",
+        name: "PHƯƠNG LINH", nickname: "Linh Pé",
         photo: "https://picsum.photos/id/134/900/1100",
         quote: "Sống đơn giản, cho đi yêu thương",
-        hobbies: ["• Chạy bộ buổi sáng 🌅", "• Viết nhật ký ✍️", "• Xem phim Hàn 📺", "• Gấp giấy origami 🦢"],
-        memories: ["• Dã ngoại cùng hội bạn thân", "• Làm thiệp tặng thầy cô", "• Đêm văn nghệ 20/11 cháy hết mình"],
-        thanks: "Mong rằng mỗi đứa đều thành công và hạnh phúc! Mãi yêu lớp! 💌"
+        hobbies: ["• Chạy bộ 🌅", "• Viết nhật ký ✍️", "• Xem phim Hàn 📺", "• Gấp giấy origami 🦢"],
+        memories: ["• Dã ngoại cùng hội bạn thân", "• Làm thiệp tặng thầy cô", "• Đêm văn nghệ 20/11"],
+        thanks: "Mong rằng mỗi đứa đều thành công. Mãi yêu lớp! 💌"
       },
       {
-        name: "ĐỨC ANH",
-        nickname: "Sói con",
+        name: "ĐỨC ANH", nickname: "Sói con",
         photo: "https://picsum.photos/id/155/900/1100",
         quote: "Chậm mà chắc, vững bước tương lai",
-        hobbies: ["• Nhiếp ảnh 📷", "• Guitar acoustic 🎵", "• Du lịch bụi 🎒", "• Pha cà phê phin ☕"],
-        memories: ["• Roadtrip xuyên Việt cùng lớp", "• Chụp ảnh kỷ yếu siêu vui nhộn", "• Thức thâu đêm ôn thi căng thẳng"],
-        thanks: "Tình bạn 12A3 sẽ không bao giờ phai. Hẹn gặp lại nhé! 🚐"
+        hobbies: ["• Nhiếp ảnh 📷", "• Guitar 🎵", "• Du lịch bụi 🎒", "• Pha cà phê phin ☕"],
+        memories: ["• Roadtrip xuyên Việt", "• Chụp ảnh kỷ yếu siêu vui", "• Thức thâu đêm ôn thi"],
+        thanks: "Tình bạn 12A3 không bao giờ phai. Hẹn gặp lại! 🚐"
       }
     ];
 
     let currentIdx = 0;
     let isTransitioning = false;
-    const total = filmCast.length;
-    const totalSpan = document.getElementById('totalFrames');
-    const counterSpan = document.getElementById('filmCounter');
-    if(totalSpan) totalSpan.innerText = total < 10 ? `0${total}` : total;
-    
-    // DOM elements
-    const photoFrame = document.getElementById('main-photo-frame');
-    const filmName = document.getElementById('film-name');
-    const filmNick = document.getElementById('film-nickname');
-    const filmQuote = document.getElementById('film-quote');
-    const hobbiesContainer = document.getElementById('film-hobbies');
-    const memoriesContainer = document.getElementById('film-memories');
-    const thanksContainer = document.getElementById('film-thanks');
-    const flashOverlay = document.getElementById('cinemaFlash');
-    const nextBtn = document.getElementById('nextFilmBtn');
+    const total = profiles.length;
+    document.getElementById('totalFrames').innerText = total < 10 ? `0${total}` : total;
 
-    // Âm thanh máy quay phim (chân thực, sử dụng web audio)
-    function playCameraShutterSound() {
+    // DOM elements
+    const mainPhotoDiv = document.getElementById('mainPhoto');
+    const filmNameSpan = document.getElementById('filmName');
+    const filmNickSpan = document.getElementById('filmNick');
+    const filmQuoteSpan = document.getElementById('filmQuote');
+    const hobbiesUl = document.getElementById('hobbiesList');
+    const memoriesUl = document.getElementById('memoriesList');
+    const thankMsgSpan = document.getElementById('thankMsg');
+    const counterSpan = document.getElementById('filmCounter');
+    const nextBtn = document.getElementById('nextSceneBtn');
+    const flashOverlay = document.getElementById('flashEffect');
+
+    // Hàm phát âm thanh nhẹ (tiếng máy quay)
+    function playShutterClick() {
       try {
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-        osc.frequency.value = 620;
-        gain.gain.value = 0.18;
-        osc.type = 'sine';
+        osc.frequency.value = 540;
+        gain.gain.value = 0.12;
+        osc.type = "sine";
         osc.start();
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.25);
-        osc.stop(audioCtx.currentTime + 0.22);
-        if(audioCtx.state === 'suspended') audioCtx.resume();
-      } catch(e) { /* im lặng nếu lỗi */ }
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+        osc.stop(audioCtx.currentTime + 0.18);
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+      } catch(e) {}
     }
 
-    // hiệu ứng flash + chuyển cảnh (film reel style)
-    function cinematicTransition() {
-      if(isTransitioning) return;
+    // Hiệu ứng flash + chuyển đổi nội dung NHƯNG sau đó fade mượt -> hiện từ từ
+    function nextPersonWithSlowReveal() {
+      if (isTransitioning) return;
       isTransitioning = true;
       
-      // Flash mạnh
-      if(flashOverlay) {
+      // Flash & âm thanh
+      if (flashOverlay) {
         flashOverlay.style.opacity = '1';
-        setTimeout(() => {
-          flashOverlay.style.opacity = '0';
-        }, 70);
+        setTimeout(() => { if(flashOverlay) flashOverlay.style.opacity = '0'; }, 85);
       }
-      playCameraShutterSound();
-
-      // Hiệu ứng rung cho khung ảnh chính
-      gsap.killTweensOf(photoFrame);
-      gsap.fromTo(photoFrame, 
+      playShutterClick();
+      
+      // hiệu ứng rung nhẹ ảnh
+      gsap.killTweensOf(mainPhotoDiv);
+      gsap.fromTo(mainPhotoDiv, 
         { scale: 1, filter: "brightness(1)" },
-        { scale: 1.02, duration: 0.1, filter: "brightness(1.25)", yoyo: true, repeat: 1, onComplete: () => {
-          // Chuyển dữ liệu nhân vật
+        { scale: 1.01, duration: 0.1, filter: "brightness(1.2)", yoyo: true, repeat: 1, onComplete: () => {
+          // Chuyển dữ liệu
           currentIdx = (currentIdx + 1) % total;
-          const character = filmCast[currentIdx];
+          const character = profiles[currentIdx];
           
-          // Cập nhật giao diện
-          if(photoFrame) photoFrame.style.backgroundImage = `url('${character.photo}')`;
-          if(filmName) filmName.textContent = character.name;
-          if(filmNick) filmNick.textContent = `"${character.nickname}"`;
-          if(filmQuote) filmQuote.textContent = `"${character.quote}"`;
-          if(hobbiesContainer) {
-            hobbiesContainer.innerHTML = character.hobbies.map(h => `<li>${h}</li>`).join('');
-          }
-          if(memoriesContainer) {
-            memoriesContainer.innerHTML = character.memories.map(m => `<li>${m}</li>`).join('');
-          }
-          if(thanksContainer) thanksContainer.innerHTML = `"${character.thanks}"`;
-          if(counterSpan) counterSpan.innerText = currentIdx+1 < 10 ? `0${currentIdx+1}` : `${currentIdx+1}`;
+          // Cập nhật nội dung
+          if (mainPhotoDiv) mainPhotoDiv.style.backgroundImage = `url('${character.photo}')`;
+          if (filmNameSpan) filmNameSpan.textContent = character.name;
+          if (filmNickSpan) filmNickSpan.textContent = `"${character.nickname}"`;
+          if (filmQuoteSpan) filmQuoteSpan.textContent = `"${character.quote}"`;
+          if (hobbiesUl) hobbiesUl.innerHTML = character.hobbies.map(h => `<li>${h}</li>`).join('');
+          if (memoriesUl) memoriesUl.innerHTML = character.memories.map(m => `<li>${m}</li>`).join('');
+          if (thankMsgSpan) thankMsgSpan.innerHTML = `"${character.thanks}"`;
+          if (counterSpan) counterSpan.innerText = (currentIdx+1) < 10 ? `0${currentIdx+1}` : `${currentIdx+1}`;
           
-          // Thêm hiệu ứng nhập vai mượt
-          gsap.fromTo('.film-card .space-y-6 > div', 
-            { opacity: 0.7, y: 6 }, 
-            { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: "power2.out" }
+          // --- QUAN TRỌNG: Reset hiệu ứng fade cho thông tin (cột phải) rồi kích hoạt lại từ từ ---
+          const infoCard = document.getElementById('revealInfoCard');
+          if (infoCard) {
+            // reset trạng thái để chạy lại transition mượt
+            infoCard.classList.remove('revealed');
+            // force reflow
+            void infoCard.offsetWidth;
+            // thêm lại class để fade in chậm rãi
+            setTimeout(() => {
+              infoCard.classList.add('revealed');
+            }, 10);
+          }
+          
+          // Cũng làm mới hiệu ứng cho ảnh và video nhỏ (chậm rãi)
+          const photoReveal = document.getElementById('revealPhotoContainer');
+          const videoReveal = document.getElementById('revealVideo');
+          const polaroidReveal = document.getElementById('revealPolaroids');
+          if (photoReveal) {
+            photoReveal.classList.remove('revealed');
+            void photoReveal.offsetWidth;
+            setTimeout(() => photoReveal.classList.add('revealed'), 20);
+          }
+          if (videoReveal) {
+            videoReveal.classList.remove('revealed');
+            void videoReveal.offsetWidth;
+            setTimeout(() => videoReveal.classList.add('revealed'), 40);
+          }
+          if (polaroidReveal) {
+            polaroidReveal.classList.remove('revealed');
+            void polaroidReveal.offsetWidth;
+            setTimeout(() => polaroidReveal.classList.add('revealed'), 30);
+          }
+          
+          // Animation nhẹ cho nội dung bên trong card
+          gsap.fromTo('.film-card .space-y-7 > div', 
+            { opacity: 0.5, y: 8 }, 
+            { opacity: 1, y: 0, duration: 0.7, stagger: 0.08, ease: "power2.out" }
           );
           
-          setTimeout(() => { isTransitioning = false; }, 220);
+          setTimeout(() => { isTransitioning = false; }, 400);
         }}
       );
       
-      // nút bấm rung nhẹ
+      // hiệu ứng nhấp nháy nút
       gsap.fromTo(nextBtn, { scale: 1 }, { scale: 0.96, duration: 0.08, yoyo: true, repeat: 1 });
     }
 
-    // Xử lý memory video cinematic (tương tác)
-    window.playCinematicMemory = function() {
-      const memoryDiv = document.getElementById('memoryFilmReel');
-      if(!memoryDiv) return;
-      playCameraShutterSound();
-      gsap.fromTo(memoryDiv, { scale: 1 }, { scale: 0.98, duration: 0.15, yoyo: true, repeat: 1 });
-      const originalHTML = memoryDiv.innerHTML;
+    // Hàm chơi video kỷ niệm (tạo hiệu ứng chậm rãi)
+    window.playMemoryScene = function() {
+      const memoryDiv = document.getElementById('memoryPlayer');
+      if (!memoryDiv) return;
+      playShutterClick();
+      gsap.fromTo(memoryDiv, { scale: 1 }, { scale: 0.98, duration: 0.2, yoyo: true, repeat: 1 });
+      const originalHtml = memoryDiv.innerHTML;
       memoryDiv.innerHTML = `
         <div class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center z-20">
           <i class="fa-solid fa-film text-4xl text-amber-400 mb-3 animate-pulse"></i>
-          <p class="text-xs font-mono text-amber-300">🎬 Đang chiếu: Kỷ niệm 12A3</p>
-          <p class="text-[10px] text-stone-400 mt-1">“khoảnh khắc không thể nào quên”</p>
+          <p class="text-xs font-mono text-amber-300">🎬 Chiếu chậm: Khoảnh khắc 12A3</p>
+          <p class="text-[10px] text-stone-400 mt-1">“kỉ niệm đẹp như phim”</p>
         </div>
       `;
       setTimeout(() => {
-        if(memoryDiv) memoryDiv.innerHTML = originalHTML;
+        if (memoryDiv) memoryDiv.innerHTML = originalHtml;
       }, 1800);
     };
     
-    // thêm hiệu ứng click ảnh đẹp
-    if(photoFrame) {
-      photoFrame.addEventListener('click', () => {
-        playCameraShutterSound();
-        gsap.fromTo(photoFrame, { scale: 1 }, { scale: 1.01, duration: 0.07, yoyo: true, repeat: 1 });
-        if(flashOverlay) {
-          flashOverlay.style.opacity = '0.6';
-          setTimeout(() => { if(flashOverlay) flashOverlay.style.opacity = '0'; }, 70);
+    // click ảnh chính cũng flash nhẹ
+    if (mainPhotoDiv) {
+      mainPhotoDiv.addEventListener('click', () => {
+        playShutterClick();
+        if (flashOverlay) {
+          flashOverlay.style.opacity = '0.7';
+          setTimeout(() => { if(flashOverlay) flashOverlay.style.opacity = '0'; }, 80);
         }
+        gsap.fromTo(mainPhotoDiv, { scale: 1 }, { scale: 1.01, duration: 0.1, yoyo: true, repeat: 1 });
       });
     }
     
-    if(nextBtn) nextBtn.addEventListener('click', cinematicTransition);
+    if (nextBtn) nextBtn.addEventListener('click', nextPersonWithSlowReveal);
     
-    // Khởi tạo frame đầu tiên
-    const initChar = filmCast[0];
-    if(photoFrame) photoFrame.style.backgroundImage = `url('${initChar.photo}')`;
-    if(filmName) filmName.textContent = initChar.name;
-    if(filmNick) filmNick.textContent = `"${initChar.nickname}"`;
-    if(filmQuote) filmQuote.textContent = `"${initChar.quote}"`;
-    if(hobbiesContainer) hobbiesContainer.innerHTML = initChar.hobbies.map(h => `<li>${h}</li>`).join('');
-    if(memoriesContainer) memoriesContainer.innerHTML = initChar.memories.map(m => `<li>${m}</li>`).join('');
-    if(thanksContainer) thanksContainer.innerHTML = `"${initChar.thanks}"`;
-    if(counterSpan) counterSpan.innerText = `01`;
-    
-    // Thêm hiệu ứng chữ chạy như điện ảnh
-    console.log("%c🎬 CUỐN FILM KỶ YẾU 2026 - THANH XUÂN LÊN PHIM", "color: #fbbf24; font-size: 16px; font-weight: bold;");
+    // KHỞI TẠO TRANG: thêm class "revealed" cho tất cả fade-reveal để hiện từ từ khi load
+    window.addEventListener('DOMContentLoaded', () => {
+      const allFadeElements = document.querySelectorAll('.fade-reveal');
+      allFadeElements.forEach(el => {
+        el.classList.add('revealed');
+      });
+      // đặt counter và dữ liệu khởi tạo
+      const first = profiles[0];
+      if (mainPhotoDiv) mainPhotoDiv.style.backgroundImage = `url('${first.photo}')`;
+      if (filmNameSpan) filmNameSpan.textContent = first.name;
+      if (filmNickSpan) filmNickSpan.textContent = `"${first.nickname}"`;
+      if (filmQuoteSpan) filmQuoteSpan.textContent = `"${first.quote}"`;
+      if (hobbiesUl) hobbiesUl.innerHTML = first.hobbies.map(h => `<li>${h}</li>`).join('');
+      if (memoriesUl) memoriesUl.innerHTML = first.memories.map(m => `<li>${m}</li>`).join('');
+      if (thankMsgSpan) thankMsgSpan.innerHTML = `"${first.thanks}"`;
+      if (counterSpan) counterSpan.innerText = `01`;
+      
+      // Tạo hiệu ứng mở màn chậm
+      gsap.fromTo('.film-card', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1.2, delay: 0.2, ease: "power2.out" });
+      gsap.fromTo('#revealPhotoContainer', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1, delay: 0.3 });
+      gsap.fromTo('#revealVideo', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1, delay: 0.45 });
+      gsap.fromTo('#revealPolaroids', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.9, delay: 0.6 });
+    });
   </script>
 </body>
 </html>
