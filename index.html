@@ -1,509 +1,260 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Kỷ Yếu 2026 · Thước Phim Chậm</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Space+Mono&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      background: #0b0d10;
-      font-family: 'Inter', sans-serif;
-      overflow-x: hidden;
-    }
-    /* film grain + vintage texture */
-    .film-grain {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjgiIG51bU9jdGF2ZXM9IjMiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjZikiIG9wYWNpdHk9IjAuMTgiLz48L3N2Zz4=');
-      background-repeat: repeat;
-      opacity: 0.28;
-      pointer-events: none;
-      z-index: 40;
-      mix-blend-mode: overlay;
-      animation: grainMove 0.6s infinite alternate;
-    }
-    @keyframes grainMove {
-      0% { transform: translate(0,0); }
-      100% { transform: translate(0.6%, 0.3%); }
-    }
-    /* film perforations top & bottom */
-    .film-perf {
-      position: fixed;
-      left: 0;
-      width: 100%;
-      height: 28px;
-      background: repeating-linear-gradient(90deg, #1e2127 0px, #1e2127 18px, #0c0e12 18px, #0c0e12 36px);
-      z-index: 45;
-      pointer-events: none;
-      opacity: 0.85;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.6);
-    }
-    .film-perf-top { top: 0; }
-    .film-perf-bottom { bottom: 0; }
-    .film-perf::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 3px;
-      background: radial-gradient(circle, #eab308 1.5px, transparent 1.5px);
-      background-size: 14px 3px;
-      opacity: 0.5;
-      bottom: 3px;
-    }
-    /* nhẹ light leak */
-    .light-leak {
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(ellipse at 15% 40%, rgba(255,180,70,0.06), transparent 70%);
-      pointer-events: none;
-      z-index: 35;
-      mix-blend-mode: screen;
-    }
-    /* main wrapper */
-    .film-container {
-      background: rgba(5, 7, 12, 0.65);
-      backdrop-filter: blur(2px);
-      border-radius: 2rem;
-      border: 1px solid rgba(245, 190, 80, 0.2);
-      transition: all 0.2s;
-    }
-    /* fade reveal chậm, mượt */
-    .fade-slow {
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 1.2s cubic-bezier(0.23, 1, 0.32, 1), transform 1.1s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-    .fade-slow.revealed {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    /* hiệu ứng chữ chậm hơn cho nickname, quote */
-    .text-reveal-char {
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.7s ease, transform 0.6s ease;
-    }
-    .text-reveal-char.revealed-char {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    /* nút chuyển cảnh chỉ ">" góc phải màn hình */
-    .next-btn-overlay {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 60;
-      background: rgba(0, 0, 0, 0.55);
-      backdrop-filter: blur(12px);
-      width: 56px;
-      height: 56px;
-      border-radius: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      border: 1px solid rgba(245, 190, 80, 0.5);
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
-    }
-    .next-btn-overlay:hover {
-      background: rgba(245, 158, 76, 0.7);
-      border-color: #fbbf24;
-      transform: scale(1.05);
-    }
-    .next-btn-overlay i {
-      font-size: 1.8rem;
-      color: #fcd34d;
-      transition: transform 0.2s;
-    }
-    .next-btn-overlay:hover i {
-      transform: translateX(3px);
-      color: white;
-    }
-    /* custom scroll */
-    ::-webkit-scrollbar {
-      width: 3px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #1a1c1f;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #b87c4f;
-      border-radius: 10px;
-    }
-    /* frame ảnh nhẹ */
-    .photo-frame {
-      box-shadow: 0 20px 35px -15px black;
-      transition: transform 0.3s ease;
-    }
-    .polaroid-strip {
-      background: rgba(0,0,0,0.3);
-      backdrop-filter: blur(4px);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/qvjz8QFW/Logo.png" />
+    <title>Thanh Xuân Của Chúng Ta - Kỷ Yếu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;600&family=Pacifico&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style/style.css">
 </head>
-<body class="text-white relative">
 
-  <!-- layers điện ảnh -->
-  <div class="film-grain"></div>
-  <div class="light-leak"></div>
-  <div class="film-perf film-perf-top"></div>
-  <div class="film-perf film-perf-bottom"></div>
-
-  <!-- Nút chuyển cảnh chỉ ">" góc phải màn hình (đẹp tối giản) -->
-  <div id="nextSceneBtn" class="next-btn-overlay cursor-pointer group">
-    <i class="fa-solid fa-chevron-right text-3xl"></i>
-  </div>
-
-  <div class="relative z-20 max-w-6xl mx-auto px-6 md:px-8 py-14 min-h-screen flex flex-col justify-center">
-    
-    <!-- header phim nhẹ nhàng -->
-    <div class="flex justify-between items-center border-b border-amber-800/30 pb-5 mb-10 fade-slow" id="headerFade">
-      <div class="flex items-center gap-4">
-        <i class="fa-regular fa-film text-amber-500 text-xl"></i>
-        <div>
-          <p class="text-[11px] tracking-[0.25em] uppercase text-amber-400/70">Kỷ yếu 2026 · 12A3</p>
-          <p class="text-[10px] font-mono text-stone-400">cuốn phim chậm · thanh xuân lưu giữ</p>
+<body style="overflow: hidden;">
+    <div id="gatekeeper" class="gatekeeper-overlay">
+        <div class="gate-card">
+            <img src="style/question/CauHoi.jpg" class="gate-img" alt="Câu hỏi">
+            <p class="gate-question">Biệt danh của lớp trưởng là gì?</p>
+            <div class="gate-options">
+                <button class="gate-btn" data-answer="A">A. Đại Ca</button>
+                <button class="gate-btn" data-answer="B">B. Bé Điệu</button>
+                <button class="gate-btn" data-answer="C">C. Sư Tử</button>
+                <button class="gate-btn" data-answer="D">D. Boss</button>
+            </div>
         </div>
-      </div>
-      <div class="bg-black/50 border border-amber-700/40 px-4 py-1 rounded-full text-amber-300 text-sm font-mono">
-        <i class="fa-regular fa-clock"></i> <span id="filmCounter">01</span> / <span id="totalFrames">05</span>
-      </div>
+
+        <div id="gateAlert" class="gate-alert">
+            <div class="alert-content">
+                <img id="alertGif" src="" alt="Alert Animation" class="alert-img">
+                <p id="alertMsg"></p>
+            </div>
+        </div>
     </div>
 
-    <!-- layout 2 cột chính -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-      
-      <!-- Cột trái : ảnh frame + kỷ niệm nhẹ -->
-      <div class="space-y-7">
-        <!-- Ảnh lớn -->
-        <div class="fade-slow" id="photoFade">
-          <div class="relative">
-            <div class="absolute -inset-1.5 bg-amber-700/10 rounded-2xl blur-lg"></div>
-            <div id="mainPhoto" 
-                 class="relative aspect-[4/5] bg-cover bg-center rounded-2xl overflow-hidden border border-amber-700/40 photo-frame"
-                 style="background-image: url('https://picsum.photos/id/1011/900/1100'); background-position: center 30%;">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/5 pointer-events-none"></div>
-              <div class="absolute bottom-5 left-5 bg-black/50 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-mono text-amber-300 border-l border-amber-500">
-                <i class="fa-regular fa-images"></i> khoảnh khắc
-              </div>
+    <audio id="bg-music"></audio>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">Thanh Xuân</a>
+            <ul class="nav-links">
+                <li><a href="#home">Trang chủ</a></li>
+                <li><a href="#members">Thành viên</a></li>
+                <li><a href="#gallery">Khoảnh khắc</a></li>
+                <li><a href="#timeline">Dòng thời gian</a></li>
+                <li><a href="#guestbook">Lưu bút</a></li>
+                <li><a href="javascript:void(0)" id="musicMenu">Nhạc</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
             </div>
-          </div>
         </div>
+    </nav>
 
-        <!-- đoạn video ngắn (memory) -->
-        <div class="fade-slow" id="videoFade">
-          <div class="bg-black/40 rounded-2xl p-4 border border-amber-800/30 backdrop-blur-sm">
-            <div class="flex items-center gap-2 text-amber-400 text-[11px] uppercase tracking-wide">
-              <i class="fa-solid clapperboard"></i> <span>🎬 B-roll · thước phim nhỏ</span>
-            </div>
-            <div id="memoryClip" class="relative mt-3 bg-black/60 rounded-xl aspect-video flex flex-col items-center justify-center overflow-hidden cursor-pointer"
-                 onclick="simulateMemory()">
-              <div class="absolute inset-0 bg-cover bg-center blur-sm scale-110 opacity-30" style="background-image: url('https://picsum.photos/id/20/800/450');"></div>
-              <div class="relative z-10 text-center">
-                <i class="fa-regular fa-circle-play text-4xl text-amber-400 drop-shadow-md hover:scale-105 transition"></i>
-                <p class="text-[10px] font-mono mt-1 bg-black/60 px-2 py-0.5 rounded-full">chạm để xem kỉ niệm</p>
-              </div>
-            </div>
-          </div>
+    <section id="home" class="hero">
+        <div class="hero-bg"
+            style="background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('style/img/AnhTapThe/Anh (1).jpg');">
         </div>
-
-        <!-- 2 ảnh nhỏ kiểu film strip -->
-        <div class="flex gap-4 justify-start fade-slow" id="polaroidFade">
-          <div class="bg-black/40 p-1.5 rounded-xl border border-amber-700/40 w-28 rotate-[-2deg] transition-all hover:rotate-0">
-            <img src="https://picsum.photos/id/169/150/150" class="w-full aspect-square object-cover rounded-md">
-            <p class="text-[8px] font-mono text-center mt-1 text-amber-300/80">🎞️ frame 02</p>
-          </div>
-          <div class="bg-black/40 p-1.5 rounded-xl border border-amber-700/40 w-28 rotate-[2deg] translate-y-2 transition-all hover:rotate-0">
-            <img src="https://picsum.photos/id/26/150/150" class="w-full aspect-square object-cover rounded-md">
-            <p class="text-[8px] font-mono text-center mt-1 text-amber-300/80">🎞️ frame 03</p>
-          </div>
-          <div class="bg-black/40 p-1.5 rounded-xl border border-amber-700/40 w-28 rotate-[-1deg] hidden sm:block">
-            <img src="https://picsum.photos/id/20/150/150" class="w-full aspect-square object-cover rounded-md">
-            <p class="text-[8px] font-mono text-center mt-1 text-amber-300/80">🎞️ frame 04</p>
-          </div>
+        <div class="sunlight"></div>
+        <div class="particles" id="particles-js"></div>
+        <div class="hero-content">
+            <h1 class="handwritten-title animate-up">Thanh Xuân Của Chúng Ta</h1>
+            <p class="hero-subtitle animate-up-delay">"Những năm tháng rực rỡ dưới mái trường thân yêu"</p>
+            <a href="#members" class="btn btn-primary animate-up-delay-2">Khám phá kỷ niệm</a>
         </div>
-      </div>
-
-      <!-- Cột phải: nội dung nhân vật - hiệu ứng chữ chậm, mượt -->
-      <div class="film-container p-6 md:p-8 rounded-3xl fade-slow" id="contentCard">
-        <div class="space-y-7">
-          <!-- tên + biệt danh -->
-          <div class="border-l-4 border-amber-400 pl-5">
-            <h1 id="filmName" class="text-5xl md:text-6xl font-bold tracking-tight bg-gradient-to-r from-amber-200 to-amber-400 bg-clip-text text-transparent">NGỌC DUNG</h1>
-            <div class="flex items-center gap-2 mt-2 flex-wrap">
-              <span id="filmNick" class="text-2xl text-amber-400/90 italic">"Dung Con"</span>
-              <span class="text-[9px] bg-amber-900/30 px-2 py-0.5 rounded-full font-mono">⭐ main character</span>
-            </div>
-          </div>
-
-          <!-- quote chậm -->
-          <div class="bg-amber-950/20 rounded-xl p-4 border border-amber-800/30">
-            <i class="fa-solid fa-quote-left text-amber-600/50 text-xl mr-1 float-left"></i>
-            <blockquote id="filmQuote" class="text-lg md:text-xl italic leading-relaxed text-stone-100 pl-2">
-              "Sống là phải cháy hết mình chứ không phải sống cho qua ngày"
-            </blockquote>
-            <div class="text-right text-amber-500/50 text-[10px] mt-2 font-mono">— câu nói đặc biệt</div>
-          </div>
-
-          <!-- sở thích & kỉ niệm -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            <div class="bg-black/30 rounded-xl p-3">
-              <h3 class="text-amber-400 text-[11px] font-bold uppercase flex items-center gap-2"><i class="fa-regular fa-star"></i> Sở thích</h3>
-              <ul id="hobbiesList" class="mt-2 space-y-1.5 text-sm text-stone-300">
-                <li>• Ngủ nướng đến 11h</li>
-                <li>• Ăn vặt cả ngày</li>
-                <li>• Chụp ảnh aesthetic</li>
-                <li>• Nghe nhạc lo-fi</li>
-              </ul>
-            </div>
-            <div class="bg-black/30 rounded-xl p-3">
-              <h3 class="text-amber-400 text-[11px] font-bold uppercase flex items-center gap-2"><i class="fa-regular fa-heart"></i> Kỉ niệm đẹp</h3>
-              <ul id="memoriesList" class="mt-2 space-y-1.5 text-sm text-stone-300">
-                <li>• Cả lớp thức trắng dự án</li>
-                <li>• Dã ngoại biển lớp 12</li>
-                <li>• Hát karaoke cùng crush</li>
-              </ul>
-            </div>
-          </div>
-
-          <!-- lời cảm ơn kiểu closing credits -->
-          <div class="bg-gradient-to-r from-stone-900/50 to-black/50 rounded-xl p-4 border-t border-amber-700/30">
-            <p id="thankMsg" class="text-sm italic text-stone-200 leading-relaxed">
-              "Cảm ơn 3 năm cấp 3 đã cho mình những người bạn tuyệt vời. Mãi mãi là 12A3!"
-            </p>
-            <div class="flex justify-end mt-2 text-[9px] text-amber-500/60">— lời tri ân —</div>
-          </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="mouse"></div>
         </div>
-      </div>
+    </section>
+
+    <section id="members" class="section members">
+        <div class="container">
+            <h2 class="section-title">Thành Viên</h2>
+            <div class="member-grid" id="memberGrid">
+            </div>
+            <div class="load-more-container">
+                <button id="loadMoreBtn" class="btn btn-outline">Xem thêm<i class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="section gallery">
+        <div class="container">
+            <h2 class="section-title">Khoảnh Khắc Đáng Nhớ</h2>
+            <div class="gallery-grid" id="galleryGrid">
+            </div>
+        </div>
+    </section>
+
+    <section id="timeline" class="section timeline">
+        <div class="container">
+            <h2 class="section-title">Dòng Thời Gian</h2>
+            <div class="timeline-container" id="timelineList">
+                <div class="timeline-line"></div>
+            </div>
+            <div class="load-more-container">
+                <button id="loadMoreTimeline" class="btn btn-outline">Xem thêm<i
+                        class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <section id="video" class="section video-section">
+        <div class="container">
+            <h2 class="section-title">Phim Ngắn Kỷ Niệm</h2>
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <!-- 
+                    <iframe width="100%" height="100%"
+                        src="https://www.youtube.com/embed/X_VJg_fKz7o?list=RDX_VJg_fKz7o" title="Kỷ yếu lớp"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+                    -->
+                    <video width="100%" height="100%" controls loop muted>
+                        <source src="style/video.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="guestbook" class="section guestbook">
+        <div class="container">
+            <h2 class="section-title">Những Lời Nhắn Nhủ</h2>
+            <div class="sticky-notes-container" id="stickyNotes">
+            </div>
+            <div class="load-more-container">
+                <button id="loadMoreGuestbook" class="btn btn-outline">Xem thêm<i
+                        class="fas fa-chevron-down"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <div id="galleryModal" class="modal">
+        <span class="close-modal">&times;</span>
+        <button id="prevBtn" class="modal-nav-btn prev"><i class="fa-solid fa-chevron-left"></i></button>
+        <button id="nextBtn" class="modal-nav-btn next"><i class="fa-solid fa-chevron-right"></i></button>
+        <div class="modal-main-content">
+            <img class="modal-content" id="modalImg">
+            <div id="caption"></div>
+
+            <div class="reaction-container">
+                <div class="reaction-item" data-emoji="👍">👍</div>
+                <div class="reaction-item" data-emoji="❤️">❤️</div>
+                <div class="reaction-item" data-emoji="🥰">🥰</div>
+                <div class="reaction-item" data-emoji="😂">😂</div>
+                <div class="reaction-item" data-emoji="🥹">🥹</div>
+                <div class="reaction-item" data-emoji="😡">😡</div>
+            </div>
+        </div>
     </div>
 
-    <!-- dòng chân trang nhẹ -->
-    <div class="mt-16 text-center text-stone-500 text-[10px] font-mono uppercase border-t border-stone-800/40 pt-5 flex justify-center gap-6">
-      <span><i class="fa-regular fa-copyright"></i> kỷ yếu 2026 · 12A3</span>
-      <span><i class="fa-regular fa-hourglass-half"></i> chậm rãi để nhớ lâu</span>
-    </div>
-  </div>
-
-  <script>
-    // ---------- Dữ liệu nhân vật (điện ảnh, nhẹ nhàng) ----------
-    const profiles = [
-      {
-        name: "NGỌC DUNG", nickname: "Dung Con",
-        photo: "https://picsum.photos/id/1011/900/1100",
-        quote: "Sống là phải cháy hết mình chứ không phải sống cho qua ngày",
-        hobbies: ["• Ngủ nướng đến 11h ☕", "• Ăn vặt cả ngày 🍿", "• Chụp ảnh aesthetic 📸", "• Nhạc lo-fi khi học 🎧"],
-        memories: ["• Cả lớp thức trắng đêm làm dự án", "• Dã ngoại biển 12 — bình minh đẹp", "• Lần đầu hát karaoke với crush"],
-        thanks: "Cảm ơn 3 năm cấp 3 cho tôi những người bạn tuyệt vời. Mãi là 12A3! 🎞️"
-      },
-      {
-        name: "MINH ANH", nickname: "Mèo Anh",
-        photo: "https://picsum.photos/id/64/900/1100",
-        quote: "Hạnh phúc là được ở bên những người mình yêu thương",
-        hobbies: ["• Đọc sách mỗi tối 📖", "• Uống trà sữa 🧋", "• Vẽ tranh 🎨", "• Đi dạo công viên 🌿"],
-        memories: ["• Chuyến tình nguyện vùng cao", "• Làm bánh Trung thu cả lớp", "• Đêm giáng sinh ấm áp"],
-        thanks: "Cảm ơn các cậu đã ở bên tớ. Yêu 12A3 vô bờ! ❄️"
-      },
-      {
-        name: "QUANG HUY", nickname: "Huy Pro",
-        photo: "https://picsum.photos/id/201/900/1100",
-        quote: "Đừng sợ thất bại, sợ nhất là không dám thử",
-        hobbies: ["• Đá bóng ⚽", "• Lập trình web 💻", "• Nghe indie 🎸", "• Nấu ăn 🍳"],
-        memories: ["• Vô địch giải bóng đá", "• Hackathon 24h code xuyên đêm", "• Sinh nhật bất ngờ từ hội bạn"],
-        thanks: "12A3 cho tớ nhiều kỉ niệm đẹp. Cảm ơn các bạn! 🏆"
-      },
-      {
-        name: "PHƯƠNG LINH", nickname: "Linh Pé",
-        photo: "https://picsum.photos/id/134/900/1100",
-        quote: "Sống đơn giản, cho đi yêu thương",
-        hobbies: ["• Chạy bộ 🌅", "• Viết nhật ký ✍️", "• Xem phim Hàn 📺", "• Gấp giấy origami 🦢"],
-        memories: ["• Dã ngoại cùng bạn thân", "• Làm thiệp tặng thầy cô", "• Đêm văn nghệ 20/11"],
-        thanks: "Mong rằng mỗi đứa đều thành công. Mãi yêu lớp! 💌"
-      },
-      {
-        name: "ĐỨC ANH", nickname: "Sói con",
-        photo: "https://picsum.photos/id/155/900/1100",
-        quote: "Chậm mà chắc, vững bước tương lai",
-        hobbies: ["• Nhiếp ảnh 📷", "• Guitar 🎵", "• Du lịch bụi 🎒", "• Pha cà phê phin ☕"],
-        memories: ["• Roadtrip xuyên Việt", "• Chụp ảnh kỷ yếu siêu vui", "• Thức thâu đêm ôn thi"],
-        thanks: "Tình bạn 12A3 không bao giờ phai. Hẹn gặp lại! 🚐"
-      }
-    ];
-
-    let currentIdx = 0;
-    let isTransitioning = false;
-    const total = profiles.length;
-    document.getElementById('totalFrames').innerText = total < 10 ? `0${total}` : total;
-
-    // DOM elements
-    const mainPhotoDiv = document.getElementById('mainPhoto');
-    const filmNameSpan = document.getElementById('filmName');
-    const filmNickSpan = document.getElementById('filmNick');
-    const filmQuoteSpan = document.getElementById('filmQuote');
-    const hobbiesUl = document.getElementById('hobbiesList');
-    const memoriesUl = document.getElementById('memoriesList');
-    const thankMsgSpan = document.getElementById('thankMsg');
-    const counterSpan = document.getElementById('filmCounter');
-    const nextBtn = document.getElementById('nextSceneBtn');
-    
-    // Các phần tử fade-slow cần reset và reveal lại
-    const fadeElements = ['.fade-slow'];
-    const photoFade = document.getElementById('photoFade');
-    const videoFade = document.getElementById('videoFade');
-    const polaroidFade = document.getElementById('polaroidFade');
-    const contentCardFade = document.getElementById('contentCard');
-    const headerFade = document.getElementById('headerFade');
-
-    // Hàm cập nhật nội dung KHÔNG flash, chỉ thay đổi dữ liệu sau đó kích hoạt lại hiệu ứng fade mượt
-    function slowSceneChange() {
-      if (isTransitioning) return;
-      isTransitioning = true;
-
-      // Tạo hiệu ứng mờ dần nhẹ cho toàn bộ nội dung để chuyển cảnh êm (không camera flash)
-      gsap.to('.film-container, #photoFade, #videoFade, #polaroidFade', {
-        opacity: 0.45,
-        duration: 0.5,
-        ease: "power1.inOut",
-        onComplete: () => {
-          // Chuyển dữ liệu nhân vật
-          currentIdx = (currentIdx + 1) % total;
-          const character = profiles[currentIdx];
-          
-          // Cập nhật tất cả nội dung
-          if (mainPhotoDiv) mainPhotoDiv.style.backgroundImage = `url('${character.photo}')`;
-          if (filmNameSpan) filmNameSpan.textContent = character.name;
-          if (filmNickSpan) filmNickSpan.textContent = `"${character.nickname}"`;
-          if (filmQuoteSpan) filmQuoteSpan.textContent = `"${character.quote}"`;
-          if (hobbiesUl) hobbiesUl.innerHTML = character.hobbies.map(h => `<li>${h}</li>`).join('');
-          if (memoriesUl) memoriesUl.innerHTML = character.memories.map(m => `<li>${m}</li>`).join('');
-          if (thankMsgSpan) thankMsgSpan.innerHTML = `"${character.thanks}"`;
-          if (counterSpan) counterSpan.innerText = (currentIdx+1) < 10 ? `0${currentIdx+1}` : `${currentIdx+1}`;
-          
-          // Reset tất cả hiệu ứng fade-slow (xóa class revealed)
-          const allFade = document.querySelectorAll('.fade-slow');
-          allFade.forEach(el => el.classList.remove('revealed'));
-          
-          // Force reflow để reset transition
-          void document.body.offsetHeight;
-          
-          // Sau một khoảng siêu nhỏ, thêm lại class revealed để hiện từ từ, chậm và mượt
-          setTimeout(() => {
-            allFade.forEach(el => el.classList.add('revealed'));
-            // Thêm hiệu ứng đặc biệt cho những dòng chữ như nickname, quote (riêng)
-            gsap.fromTo('#filmNick', 
-              { opacity: 0, y: 10 }, 
-              { opacity: 1, y: 0, duration: 0.9, ease: "power2.out", delay: 0.1 }
-            );
-            gsap.fromTo('#filmQuote', 
-              { opacity: 0, y: 8 }, 
-              { opacity: 1, y: 0, duration: 1, ease: "power2.out", delay: 0.2 }
-            );
-            gsap.fromTo('#filmName', 
-              { opacity: 0, y: 12 }, 
-              { opacity: 1, y: 0, duration: 0.9, ease: "back.out(0.5)", delay: 0.05 }
-            );
-            // cảm giác chậm cho list sở thích & kỉ niệm
-            gsap.fromTo('#hobbiesList li', 
-              { opacity: 0, x: -6 }, 
-              { opacity: 1, x: 0, duration: 0.6, stagger: 0.08, ease: "power1.out", delay: 0.3 }
-            );
-            gsap.fromTo('#memoriesList li', 
-              { opacity: 0, x: -6 }, 
-              { opacity: 1, x: 0, duration: 0.6, stagger: 0.08, ease: "power1.out", delay: 0.35 }
-            );
-            gsap.fromTo('#thankMsg', 
-              { opacity: 0, y: 8 }, 
-              { opacity: 1, y: 0, duration: 0.9, delay: 0.45 }
-            );
-          }, 30);
-          
-          // fade ngược lại opacity cho các thành phần chính
-          gsap.to('.film-container, #photoFade, #videoFade, #polaroidFade', {
-            opacity: 1,
-            duration: 0.9,
-            ease: "power2.out",
-            delay: 0.2,
-            onComplete: () => {
-              isTransitioning = false;
-            }
-          });
-        }
-      });
-      
-      // nhẹ nhàng lắc nhẹ nút ">" tạo phản hồi
-      gsap.fromTo(nextBtn, { scale: 1 }, { scale: 0.96, duration: 0.2, yoyo: true, repeat: 1, ease: "power1.out" });
-    }
-
-    // Xử lý memory clip (chỉ mô phỏng cảm xúc không ồn ào)
-    window.simulateMemory = function() {
-      const memDiv = document.getElementById('memoryClip');
-      if (!memDiv) return;
-      const originalHtml = memDiv.innerHTML;
-      memDiv.innerHTML = `
-        <div class="absolute inset-0 bg-black/85 flex flex-col items-center justify-center z-20">
-          <i class="fa-regular fa-heart text-3xl text-amber-400 mb-2 animate-pulse"></i>
-          <p class="text-xs font-mono text-amber-300">🎞️ thước phim kỉ niệm</p>
-          <p class="text-[9px] text-stone-400 mt-1">“khoảnh khắc đẹp nhất 12A3”</p>
+    <div id="profileModal" class="modal profile-modal">
+        <div class="modal-card">
+            <span class="close-profile">&times;</span>
+            <div class="profile-header">
+                <img id="profileImg" src="" alt="">
+                <div class="profile-info">
+                    <h3 id="profileName">Tên học sinh</h3>
+                    <p id="profileNickname" class="nickname">Nickname</p>
+                </div>
+            </div>
+            <div class="profile-body">
+                <div class="profile-field">
+                    <i class="fas fa-heart"></i>
+                    <div>
+                        <strong>Sở thích:</strong>
+                        <span id="profileHobbies">...</span>
+                    </div>
+                </div>
+                <div class="profile-field">
+                    <i class="fas fa-comment-dots"></i>
+                    <div>
+                        <strong>Lời nhắn:</strong>
+                        <span id="profileMessage">"Thanh xuân như một tách trà..."</span>
+                    </div>
+                </div>
+            </div>
         </div>
-      `;
-      setTimeout(() => {
-        if (memDiv) memDiv.innerHTML = originalHtml;
-      }, 1500);
-      // hiệu ứng nhẹ
-      gsap.fromTo(memDiv, { scale: 1 }, { scale: 0.99, duration: 0.2, yoyo: true, repeat: 1 });
-    };
+    </div>
 
-    // Sự kiện nút chuyển cảnh (chỉ ">" ở góc phải)
-    if (nextBtn) {
-      nextBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        slowSceneChange();
-      });
-    }
-    
-    // click ảnh chính cũng tạo cảm giác nhưng không chuyển cảnh: chỉ hiệu ứng nhẹ
-    if (mainPhotoDiv) {
-      mainPhotoDiv.addEventListener('click', () => {
-        gsap.fromTo(mainPhotoDiv, { scale: 1 }, { scale: 1.01, duration: 0.2, yoyo: true, repeat: 1 });
-      });
-    }
-    
-    // KHỞI TẠO: Hiện tất cả các phần tử fade-slow ngay khi load (từ từ)
-    window.addEventListener('DOMContentLoaded', () => {
-      const allFade = document.querySelectorAll('.fade-slow');
-      allFade.forEach(el => el.classList.add('revealed'));
-      
-      // hiệu ứng chậm cho dòng chữ đầu
-      gsap.fromTo('#filmName', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1.2, delay: 0.1 });
-      gsap.fromTo('#filmNick', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 1.1, delay: 0.2 });
-      gsap.fromTo('#filmQuote', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 1.2, delay: 0.3 });
-      gsap.fromTo('#hobbiesList li', { opacity: 0, x: -8 }, { opacity: 1, x: 0, duration: 0.7, stagger: 0.07, delay: 0.4 });
-      gsap.fromTo('#memoriesList li', { opacity: 0, x: -8 }, { opacity: 1, x: 0, duration: 0.7, stagger: 0.07, delay: 0.5 });
-      gsap.fromTo('#thankMsg', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.9, delay: 0.7 });
-      
-      // set dữ liệu đầu
-      const first = profiles[0];
-      if (mainPhotoDiv) mainPhotoDiv.style.backgroundImage = `url('${first.photo}')`;
-      if (filmNameSpan) filmNameSpan.textContent = first.name;
-      if (filmNickSpan) filmNickSpan.textContent = `"${first.nickname}"`;
-      if (filmQuoteSpan) filmQuoteSpan.textContent = `"${first.quote}"`;
-      if (hobbiesUl) hobbiesUl.innerHTML = first.hobbies.map(h => `<li>${h}</li>`).join('');
-      if (memoriesUl) memoriesUl.innerHTML = first.memories.map(m => `<li>${m}</li>`).join('');
-      if (thankMsgSpan) thankMsgSpan.innerHTML = `"${first.thanks}"`;
-      if (counterSpan) counterSpan.innerText = `01`;
-    });
-  </script>
+    <!-- Music Modal (Music Player UI) -->
+    <div id="musicModal" class="modal profile-modal">
+        <div class="modal-card">
+            <span class="close-music">&times;</span>
+            
+            <div class="music-player-header">
+                <div class="album-disc" id="playerDisc">
+                    <img src="style/sound/Anh (1).jpg" id="currentAlbumArt" alt="Album Art">
+                </div>
+                <div class="player-info">
+                    <div class="song-title-wrapper">
+                        <h3 id="currentSongTitle">Tháng Năm Không Quên</h3>
+                    </div>
+                    <div class="player-controls">
+                        <i class="fas fa-step-backward" id="prevSongBtn"></i>
+                        <i class="fas fa-play" id="mainPlayBtn"></i>
+                        <i class="fas fa-step-forward" id="nextSongBtn"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="music-list-container">
+                <div class="music-option pulse-btn" data-src="style/sound/Tháng Năm Không Quên.mp3" data-img="style/sound/Anh (1).jpg">
+                    <img src="style/sound/Anh (1).jpg" alt="Tháng Năm Không Quên">
+                    <div class="music-info">
+                        <strong>Tháng Năm Không Quên</strong>
+                    </div>
+                </div>
+                <div class="music-option pulse-btn" data-src="style/sound/Năm Tháng Trôi Qua.mp3" data-img="style/sound/Anh (2).jpg">
+                    <img src="style/sound/Anh (2).jpg" alt="Năm Tháng Trôi Qua">
+                    <div class="music-info">
+                        <strong>Năm Tháng Trôi Qua</strong>
+                    </div>
+                </div>
+                <div class="music-option pulse-btn" data-src="style/sound/Nhớ Mãi Chuyến Đi Này.mp3" data-img="style/sound/Anh (3).jpg">
+                    <img src="style/sound/Anh (3).jpg" alt="Nhớ Mãi Chuyến Đi Này">
+                    <div class="music-info">
+                        <strong>Nhớ Mãi Chuyến Đi Này</strong>
+                    </div>
+                </div>
+                <div class="music-option pulse-btn" data-src="style/sound/Không Yêu Cũng Chẳng Cô Đơn.mp3" data-img="style/sound/Anh (4).jpg">
+                    <img src="style/sound/Anh (4).jpg" alt="Không Yêu Cũng Chẳng Cô Đơn">
+                    <div class="music-info">
+                        <strong>Không Yêu Cũng Chẳng Cô Đơn</strong>
+                    </div>
+                </div>
+                <div class="music-option pulse-btn" data-src="style/sound/Mùa Hè Của Peppa.mp3" data-img="style/sound/Anh (5).jpg">
+                    <img src="style/sound/Anh (5).jpg" alt="Mùa Hè Của Peppa">
+                    <div class="music-info">
+                        <strong>Mùa Hè Của Peppa</strong>
+                    </div>
+                </div>
+                <div class="music-option pulse-btn" data-src="style/sound/Nơi Pháo Hoa Rực Rỡ.mp3" data-img="style/sound/Anh (6).jpg">
+                    <img src="style/sound/Anh (6).jpg" alt="Nơi Pháo Hoa Rực Rỡ">
+                    <div class="music-info">
+                        <strong>Nơi Pháo Hoa Rực Rỡ</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Lớp Chúng Minh - <i class="fas fa-heart"></i>Dr.Gifter</p>
+        </div>
+    </footer>
+
+    <script src="style/script.js"></script>
 </body>
+
 </html>
