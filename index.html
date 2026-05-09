@@ -1,321 +1,193 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MERRY CHRISTMAS</title>
-    <link rel="stylesheet" href="./styles.css">
-    <link rel="stylesheet" href="./css/tree.css">
- 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ngọc Dung - Kỉ Yếu 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  
+  <style>
+    body {
+      background: #f5e8d3;
+      background-image: 
+        linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      font-family: 'Georgia', serif;
+    }
 
+    .film-grain {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: url('https://picsum.photos/id/1015/1920/1080') repeat;
+      opacity: 0.08;
+      pointer-events: none;
+      z-index: 1;
+      mix-blend-mode: overlay;
+    }
+
+    .polaroid {
+      transform: rotate(-4deg);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      border: 12px solid white;
+      background: white;
+    }
+  </style>
 </head>
-<body>
-   
-    <ul>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-      </ul>
-      <ul>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-      </ul>
-    <div id="Merry" class="christmas-message">Merry Christmas</div>
-    <img class="tree-icon">
-    <audio id="audio" src="./giangsinh.mp3"></audio>
-    <div class="container">
-        <button id="showButton">
-            <img src="./img/letters.png" alt="Hình ảnh nút" />
-        </button>
-    </div>
+<body class="min-h-screen py-12 relative overflow-hidden">
 
-    <div id="guideInfo" class="hidden">
-        <button id="closeButton" class="close-btn">X</button>
-        <div class="card">
-            <div class="imgBox">
-                <div class="bark"></div>
-                <img src="./img/thiep.png">
-            </div>
-            <div class="details">
-                <h4 class="color margin"> MERRY CHRISTMAS </h4>
-                <p>Giáng Sinh này tớ chỉ mong</p>
-                <p>mọi điều tốt đẹp sẽ đến với cậu,</p>
-                <p>và tình bạn chúng ta sẽ luôn bền chặt</p>
-                <p>Chúc cậu một mùa lễ an lành</p>
-                <p>và một năm mới đầy niềm vui!</p>
-                <p class="text-right">Chúc mừng Giáng Sinh!</p>
-                <p class="text-right">♥Your friend♥</p>
-            </div>
+  <div class="film-grain"></div>
+
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
+      <!-- ==================== BÊN TRÁI ==================== -->
+      <div class="space-y-8">
+        <!-- Ảnh lớn -->
+        <div id="main-photo" class="aspect-[4/5] bg-cover bg-center rounded-2xl shadow-2xl overflow-hidden border-8 border-white cursor-pointer"
+             style="background-image: url('https://picsum.photos/id/1011/800/1000')">
         </div>
-    </div>
 
-    <div class="fixed-gif">
-        <img src="./img/mewmew.gif" alt="GIF Image">
+        <!-- Video ngắn -->
+        <div class="bg-white p-4 rounded-xl shadow-xl border border-gray-200">
+          <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Memory Video</p>
+          <div class="bg-black rounded-lg aspect-video flex items-center justify-center text-white">
+            <i class="fa-solid fa-play text-4xl"></i>
+          </div>
+        </div>
+
+        <!-- Polaroid -->
+        <div class="flex gap-6">
+          <img src="https://picsum.photos/id/237/300/300" class="polaroid w-36 h-36 object-cover">
+          <img src="https://picsum.photos/id/201/300/300" class="polaroid w-36 h-36 object-cover mt-8">
+        </div>
       </div>
-    <div id="snow-container"></div>
 
-    <script src="./script.js"></script>
-    <script>
-        document.body.addEventListener("click", function() {
-             var audio = document.getElementById("audio");
-             audio.play();
-         });
-     </script>
+      <!-- ==================== BÊN PHẢI ==================== -->
+      <div class="space-y-8">
+        <div>
+          <h1 id="name" class="text-6xl font-bold text-gray-800">NGỌC DUNG</h1>
+          <p id="nickname" class="text-2xl text-rose-600">"Dung Con"</p>
+        </div>
+
+        <blockquote id="quote" class="text-2xl italic border-l-4 border-rose-400 pl-6 text-gray-700">
+          "Sống là phải cháy hết mình chứ không phải sống cho qua ngày"
+        </blockquote>
+
+        <div>
+          <h3 class="uppercase text-sm tracking-widest text-gray-500 mb-3">Sở thích</h3>
+          <ul class="space-y-2 text-lg">
+            <li>• Ngủ nướng đến 11h</li>
+            <li>• Ăn vặt cả ngày</li>
+            <li>• Chụp ảnh aesthetic</li>
+            <li>• Nghe nhạc lo-fi khi học</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="uppercase text-sm tracking-widest text-gray-500 mb-3">Kỉ niệm đẹp</h3>
+          <ul class="space-y-2 text-lg">
+            <li>• Cả lớp cùng nhau thức trắng đêm làm dự án</li>
+            <li>• Buổi dã ngoại lớp 12 ở biển</li>
+            <li>• Lần đầu tiên hát karaoke với crush</li>
+          </ul>
+        </div>
+
+        <div class="flex gap-6 text-3xl text-gray-600">
+          <i class="fa-brands fa-instagram cursor-pointer hover:text-rose-500 transition"></i>
+          <i class="fa-brands fa-tiktok cursor-pointer hover:text-rose-500 transition"></i>
+          <i class="fa-brands fa-facebook cursor-pointer hover:text-rose-500 transition"></i>
+        </div>
+
+        <div class="bg-rose-50 border border-rose-200 p-6 rounded-2xl italic">
+          "Cảm ơn 3 năm cấp 3 đã cho mình những người bạn tuyệt vời. Mãi mãi là 12A3!"
+        </div>
+
+        <!-- Nút chuyển người -->
+        <button onclick="nextPerson()" 
+                class="mt-8 px-10 py-4 bg-gray-900 text-white rounded-2xl text-lg flex items-center gap-3 hover:bg-rose-600 transition">
+          <span>Người tiếp theo</span>
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flash Camera Overlay -->
+  <div id="flash" class="fixed inset-0 bg-white pointer-events-none z-50 hidden"></div>
+
+  <script>
+    // Danh sách một vài người (demo)
+    const profiles = [
+      {
+        name: "NGỌC DUNG",
+        nickname: "Dung Con",
+        photo: "https://picsum.photos/id/1011/800/1000",
+        quote: "Sống là phải cháy hết mình chứ không phải sống cho qua ngày"
+      },
+      {
+        name: "MINH ANH",
+        nickname: "Mèo Anh",
+        photo: "https://picsum.photos/id/64/800/1000",
+        quote: "Hạnh phúc là được ở bên những người mình yêu thương"
+      },
+      {
+        name: "QUANG HUY",
+        nickname: "Huy Pro",
+        photo: "https://picsum.photos/id/201/800/1000",
+        quote: "Đừng sợ thất bại, sợ nhất là không dám thử"
+      }
+    ];
+
+    let current = 0;
+
+    function playShutter() {
+      const audio = new Audio('https://freesound.org/data/previews/276/276951_5123854-lq.mp3');
+      audio.volume = 0.6;
+      audio.play();
+    }
+
+    function cameraFlash() {
+      const flash = document.getElementById('flash');
+      flash.classList.remove('hidden');
+      
+      playShutter();
+
+      gsap.fromTo(flash, 
+        { opacity: 0 },
+        { 
+          opacity: 1, 
+          duration: 0.08,
+          onComplete: () => {
+            // Đổi thông tin
+            current = (current + 1) % profiles.length;
+            const p = profiles[current];
+
+            document.getElementById('main-photo').style.backgroundImage = `url('${p.photo}')`;
+            document.getElementById('name').textContent = p.name;
+            document.getElementById('nickname').textContent = `"${p.nickname}"`;
+            document.getElementById('quote').textContent = `"${p.quote}"`;
+
+            gsap.to(flash, {
+              opacity: 0,
+              duration: 0.5,
+              delay: 0.15,
+              onComplete: () => flash.classList.add('hidden')
+            });
+          }
+        }
+      );
+    }
+
+    function nextPerson() {
+      cameraFlash();
+    }
+
+    // Khởi tạo
+    console.log("%cKỉ Yếu 2026 - Đang chạy", "color: #e11d48; font-size: 14px");
+  </script>
 </body>
 </html>
